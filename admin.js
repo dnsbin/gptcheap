@@ -1,9 +1,50 @@
-
 const API_BASE = "http://YOUR_SERVER_IP:3000";
 const adminPassword = localStorage.getItem("adminPassword");
 
 if (!adminPassword) {
   window.location.href = "admin_login.html";
+}
+
+let allOrders = [];
+
+function statusClass(status) {
+  if (status === "PAID") {
+    return "status-paid";
+  }
+  if (status === "LOCKED") {
+    return "status-locked";
+  }
+  return "status-pending";
+}
+
+function renderOrders() {
+  const container = document.getElementById("admin-orders");
+  const search = document.getElementById("search").value.toLowerCase();
+  const filter = document.getElementById("statusFilter").value;
+
+  container.innerHTML = "";
+
+  allOrders
+    .filter(order => {
+      const matchesSearch = order.email.toLowerCase().includes(search) || order.payment_id.toLowerCase().includes(search);
+      const matchesStatus = filter === "ALL" || order.status === filter;
+      return matchesSearch && matchesStatus;
+    })
+    .forEach(order => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${order.email}</td>
+        <td><span class="status-pill ${statusClass(order.status)}">${order.status}</span></td>
+        <td class="mono">${order.payment_id}</td>
+        <td>
+          <div class="table-actions">
+            <button class="btn btn-outline" onclick="markPaid('${order.payment_id}')">Mark Paid</button>
+            <button class="btn btn-outline" onclick="lock('${order.payment_id}')">Lock</button>
+          </div>
+        </td>
+      `;
+      container.appendChild(row);
+    });
 }
 
 async function loadAllOrders() {
@@ -17,22 +58,8 @@ async function loadAllOrders() {
     return;
   }
 
-  const orders = await res.json();
-  const container = document.getElementById("admin-orders");
-  container.innerHTML = "";
-
-  orders.forEach(o => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <p><strong>${o.email}</strong></p>
-      <p>Status: ${o.status}</p>
-      <p>Payment ID: ${o.payment_id}</p>
-      <button onclick="markPaid('${o.payment_id}')">Mark Paid</button>
-      <button onclick="lock('${o.payment_id}')">Lock</button>
-    `;
-    container.appendChild(div);
-  });
+  allOrders = await res.json();
+  renderOrders();
 }
 
 async function markPaid(paymentId) {
@@ -58,5 +85,8 @@ async function lock(paymentId) {
   });
   loadAllOrders();
 }
+
+document.getElementById("search").addEventListener("input", renderOrders);
+document.getElementById("statusFilter").addEventListener("change", renderOrders);
 
 loadAllOrders();

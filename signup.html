@@ -1,29 +1,103 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Checkout — GPTCheap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h2>Checkout</h2>
+<body class="page">
+  <div class="container">
+    <header class="topbar">
+      <div class="logo">GPTCheap</div>
+      <div class="nav-links">
+        <a href="index.html" class="btn btn-outline">Back</a>
+        <a href="login.html" class="btn btn-outline">Login</a>
+      </div>
+    </header>
 
-  <div class="card">
-    <p>Your Email</p>
-    <input placeholder="you@email.com">
+    <section class="section">
+      <div class="grid two">
+        <div>
+          <p class="badge">Checkout Flow</p>
+          <h1>Secure Payment Gate</h1>
+          <p>Generate your payment ID, send eTransfer, and track status in the dashboard.</p>
+          <div class="card">
+            <h3>Steps</h3>
+            <ol class="note">
+              <li>Enter your email and sender email.</li>
+              <li>Generate a Payment ID.</li>
+              <li>Send $100 CAD via eTransfer.</li>
+              <li>Return to dashboard to unlock credentials.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">
+            <h2>Payment Details</h2>
+            <span class="badge">Required</span>
+          </div>
+          <label class="note" for="email">Your Email</label>
+          <input class="input" id="email" placeholder="you@email.com">
 
-    <p>Sender Email (recommended)</p>
-    <input placeholder="etransfer email">
+          <label class="note" for="sender">Sender Email</label>
+          <input class="input" id="sender" placeholder="etransfer sender email">
 
-    <p>Your Payment ID</p>
-    <div class="payment-id">GPT-8F3K2</div>
+          <div class="card">
+            <div class="panel-title">
+              <h3 class="mono">Payment ID</h3>
+              <button class="btn btn-outline copy-btn" data-copy-target="paymentId">Copy</button>
+            </div>
+            <div class="kpi" id="paymentId">Not Generated</div>
+            <p class="note">Include this Payment ID in the transfer note.</p>
+            <button class="btn" id="generate-payment">Generate Payment ID</button>
+          </div>
 
-    <p>Send $100 CAD via eTransfer to:</p>
-    <strong>payments@gptcheap.ca</strong>
+          <div class="card">
+            <div class="panel-title">
+              <h3>Send eTransfer</h3>
+              <button class="btn btn-outline copy-btn" data-copy-text="payments@gptcheap.ca">Copy</button>
+            </div>
+            <p class="note">Send $100 CAD to</p>
+            <p class="mono">payments@gptcheap.ca</p>
+          </div>
 
-    <p class="note">Include the Payment ID in the note</p>
+          <a href="dashboard.html" class="btn">I Sent Payment</a>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <a href="dashboard.html" class="btn">I Sent Payment</a>
+  <div class="toast" id="toast">COPIED</div>
+
+  <script src="checkout.js"></script>
+  <script>
+    const toast = document.getElementById("toast");
+
+    function showToast() {
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    function handleCopy(text) {
+      if (!text) {
+        return;
+      }
+      navigator.clipboard.writeText(text).then(showToast);
+    }
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-copy-target], [data-copy-text]");
+      if (!button) {
+        return;
+      }
+      const targetId = button.getAttribute("data-copy-target");
+      const text = button.getAttribute("data-copy-text") || (targetId ? document.getElementById(targetId).innerText : "");
+      handleCopy(text);
+    });
+
+    document.getElementById("generate-payment").addEventListener("click", () => {
+      createOrder();
+    });
+  </script>
 </body>
 </html>
