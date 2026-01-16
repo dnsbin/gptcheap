@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login — GPTCheap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Admin Login</h2>
+  <input type="password" id="password" placeholder="Admin password">
+  <button class="btn" onclick="login()">Login</button>
+
+<script>
+function login() {
+  const pw = document.getElementById("password").value;
+  localStorage.setItem("adminPassword", pw);
+  window.location.href = "admin.html";
+}
+</script>
+</body>
+</html>

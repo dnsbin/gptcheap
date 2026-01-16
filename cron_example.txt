@@ -1,0 +1,3 @@
+
+# Run every 5 minutes
+*/5 * * * * node /root/gptcheap_v3_gmail/gmailWatcher.js

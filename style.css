@@ -1,0 +1,87 @@
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #0f0f14;
+  color: white;
+  text-align: center;
+}
+nav {
+  display:flex;
+  justify-content:space-between;
+  padding:20px;
+}
+.logo {
+  font-weight:bold;
+  font-size:20px;
+}
+.nav-btn {
+  color:#00ff99;
+  text-decoration:none;
+}
+.hero {
+  margin-top:15vh;
+}
+.hero span {
+  color:#00ff99;
+}
+.price {
+  font-size:32px;
+  color:#00ff99;
+}
+.strike {
+  text-decoration:line-through;
+  color:#777;
+}
+.btn {
+  display:inline-block;
+  margin-top:20px;
+  background:#00ff99;
+  color:black;
+  padding:14px 28px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
+}
+.how {
+  margin-top:80px;
+}
+.steps {
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+.steps div {
+  background:#1c1c28;
+  padding:20px;
+  border-radius:10px;
+}
+.card {
+  background:#1c1c28;
+  padding:20px;
+  border-radius:12px;
+  width:320px;
+  margin:20px auto;
+}
+.payment-id {
+  background:black;
+  padding:10px;
+  border-radius:6px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+.pending {
+  color:orange;
+}
+.active {
+  color:#00ff99;
+}
+.note {
+  font-size:14px;
+  color:#aaa;
+}
+footer {
+  margin:80px 0 20px;
+  color:#666;
+}

@@ -1,0 +1,14 @@
+
+FILES TO MODIFY IN ITERATION 1:
+
+1) signup.html
+- Include checkout.js
+- Call createOrder()
+
+2) dashboard.html
+- Include dashboard.js
+- Add <div id="orders"></div>
+
+3) Replace YOUR_SERVER_IP
+
+---
