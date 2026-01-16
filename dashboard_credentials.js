@@ -8,6 +8,16 @@ function statusClass(status) {
   return "status-pending";
 }
 
+function statusClass(status) {
+  if (status === "PAID") {
+    return "status-paid";
+  }
+  if (status === "LOCKED") {
+    return "status-locked";
+  }
+  return "status-pending";
+}
+
 async function loadOrders() {
   const session = await getSession();
   if (!session) {
