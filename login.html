@@ -1,13 +1,36 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Login — GPTCheap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h2>Login</h2>
-  <input placeholder="Email">
-  <button class="btn">Send Login Link</button>
+<body class="page">
+  <div class="container">
+    <header class="topbar">
+      <div class="logo">GPTCheap</div>
+      <div class="nav-links">
+        <a href="index.html" class="btn btn-outline">Home</a>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="panel" style="max-width: 520px; margin: 0 auto;">
+        <p class="badge">Login Gate</p>
+        <h2>Access Portal</h2>
+        <p>Enter your email to access your dashboard credentials.</p>
+        <input class="input" placeholder="Email" id="loginEmail">
+        <button class="btn" id="loginButton" style="margin-top: 18px;">Enter Dashboard</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.getElementById("loginButton").addEventListener("click", () => {
+      const email = document.getElementById("loginEmail").value;
+      localStorage.setItem("userEmail", email);
+      window.location.href = "dashboard.html";
+    });
+  </script>
 </body>
 </html>

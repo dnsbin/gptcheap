@@ -1,23 +1,84 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Dashboard — GPTCheap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h2>Your Accounts</h2>
+<body class="page">
+  <div class="container">
+    <header class="topbar">
+      <div class="logo">GPTCheap</div>
+      <div class="nav-links">
+        <span class="badge" id="userEmail">No email</span>
+        <a href="signup.html" class="btn btn-outline">New Order</a>
+      </div>
+    </header>
 
-  <div class="card">
-    <p><strong>Student Plus</strong></p>
-    <p>Status: <span class="pending">Pending Payment</span></p>
-    <p>Payment ID: GPT-8F3K2</p>
+    <div class="sidebar-layout">
+      <aside class="sidebar">
+        <h3>Navigation</h3>
+        <a class="active" href="dashboard.html">Orders</a>
+        <a href="signup.html">Checkout</a>
+        <a href="index.html">Home</a>
+        <p class="note">Status updates appear instantly once paid.</p>
+      </aside>
+
+      <main>
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Orders</h2>
+            <span class="badge">Realtime</span>
+          </div>
+          <div class="grid three">
+            <div class="card">
+              <h3>Total Orders</h3>
+              <div class="kpi" id="kpi-total">0</div>
+            </div>
+            <div class="card">
+              <h3>Paid</h3>
+              <div class="kpi" id="kpi-paid">0</div>
+            </div>
+            <div class="card">
+              <h3>Pending</h3>
+              <div class="kpi" id="kpi-pending">0</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="grid two" id="orders"></div>
+        </section>
+      </main>
+    </div>
   </div>
 
-  <div class="card inactive">
-    <p><strong>Student Plus</strong></p>
-    <p>Status: <span class="active">Active</span></p>
-    <p>Expires: Jan 2027</p>
-  </div>
+  <div class="toast" id="toast">COPIED</div>
+
+  <script src="dashboard_credentials.js"></script>
+  <script>
+    const email = localStorage.getItem("userEmail") || "No email";
+    document.getElementById("userEmail").innerText = email;
+
+    const toast = document.getElementById("toast");
+
+    function showToast() {
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-copy-text], [data-copy-target]");
+      if (!button) {
+        return;
+      }
+      const targetId = button.getAttribute("data-copy-target");
+      const text = button.getAttribute("data-copy-text") || (targetId ? document.getElementById(targetId).innerText : "");
+      if (!text) {
+        return;
+      }
+      navigator.clipboard.writeText(text).then(showToast);
+    });
+  </script>
 </body>
 </html>

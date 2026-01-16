@@ -1,14 +1,29 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Admin Login — GPTCheap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h2>Admin Login</h2>
-  <input type="password" id="password" placeholder="Admin password">
-  <button class="btn" onclick="login()">Login</button>
+<body class="page">
+  <div class="container">
+    <header class="topbar">
+      <div class="logo">GPTCheap</div>
+      <div class="nav-links">
+        <span class="badge">Admin Access</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="panel" style="max-width: 520px; margin: 0 auto;">
+        <p class="badge">Restricted</p>
+        <h2>Admin Login</h2>
+        <p>Enter your admin password to manage orders.</p>
+        <input class="input" type="password" id="password" placeholder="Admin password">
+        <button class="btn" onclick="login()" style="margin-top: 18px;">Login</button>
+      </div>
+    </section>
+  </div>
 
 <script>
 function login() {
