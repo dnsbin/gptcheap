@@ -1,29 +1,52 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Checkout — GPTCheap</title>
+  <title>Sign Up — GPTCheap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h2>Checkout</h2>
+<body class="page">
+  <div class="container">
+    <header class="topbar">
+      <div class="logo">GPTCheap</div>
+      <div class="nav-links">
+        <a href="login.html" class="btn btn-outline">Login</a>
+      </div>
+    </header>
 
-  <div class="card">
-    <p>Your Email</p>
-    <input placeholder="you@email.com">
-
-    <p>Sender Email (recommended)</p>
-    <input placeholder="etransfer email">
-
-    <p>Your Payment ID</p>
-    <div class="payment-id">GPT-8F3K2</div>
-
-    <p>Send $100 CAD via eTransfer to:</p>
-    <strong>payments@gptcheap.ca</strong>
-
-    <p class="note">Include the Payment ID in the note</p>
+    <section class="section">
+      <div class="panel" style="max-width: 560px; margin: 0 auto;">
+        <p class="badge">Create Account</p>
+        <h2>Sign Up</h2>
+        <p>Student pricing requires a verified account tied to your orders.</p>
+        <label class="note" for="signupEmail">Email</label>
+        <input class="input" id="signupEmail" placeholder="you@email.com">
+        <label class="note" for="signupPassword">Password</label>
+        <input class="input" type="password" id="signupPassword" placeholder="Minimum 8 characters">
+        <div class="table-actions" style="margin-top: 18px;">
+          <button class="btn" id="signupButton">Create Account</button>
+          <a href="login.html" class="btn btn-outline">Have an account</a>
+        </div>
+        <p class="note" id="signupMessage"></p>
+      </div>
+    </section>
   </div>
 
-  <a href="dashboard.html" class="btn">I Sent Payment</a>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="client.js"></script>
+  <script>
+    document.getElementById("signupButton").addEventListener("click", async () => {
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      const message = document.getElementById("signupMessage");
+      const client = await getSupabaseClient();
+      const { error } = await client.auth.signUp({ email, password });
+      if (error) {
+        message.innerText = error.message;
+        return;
+      }
+      window.location.href = "checkout.html";
+    });
+  </script>
 </body>
 </html>

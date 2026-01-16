@@ -1,18 +1,42 @@
-
-const API_BASE = "http://YOUR_SERVER_IP:3000";
-
 async function createOrder() {
-  const email = document.getElementById("email").value;
+  const emailField = document.getElementById("email");
   const sender = document.getElementById("sender").value;
+  const paymentIdField = document.getElementById("paymentId");
 
-  localStorage.setItem("userEmail", email);
+  const session = await getSession();
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (emailField) {
+    emailField.value = session.user.email || "";
+  }
 
   const res = await fetch(`${API_BASE}/api/order`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, senderEmail: sender })
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.access_token}`
+    },
+    body: JSON.stringify({ senderEmail: sender })
   });
 
   const data = await res.json();
-  document.getElementById("paymentId").innerText = data.paymentId;
+  paymentIdField.innerText = data.paymentId || "";
 }
+
+async function loadCheckoutUser() {
+  const emailField = document.getElementById("email");
+  const session = await getSession();
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (emailField) {
+    emailField.value = session.user.email || "";
+  }
+}
+
+loadCheckoutUser();
