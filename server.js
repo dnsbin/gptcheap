@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { createClient } = require("@supabase/supabase-js");
-
+require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
