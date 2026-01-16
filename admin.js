@@ -1,4 +1,4 @@
-const API_BASE = "http://YOUR_SERVER_IP:3000";
+const API_BASE = window.location.origin;
 const adminPassword = localStorage.getItem("adminPassword");
 
 if (!adminPassword) {
@@ -36,10 +36,13 @@ function renderOrders() {
         <td>${order.email}</td>
         <td><span class="status-pill ${statusClass(order.status)}">${order.status}</span></td>
         <td class="mono">${order.payment_id}</td>
+        <td class="mono">${order.payment_source || "-"}</td>
+        <td class="mono">${order.gmail_message_id || "-"}</td>
         <td>
           <div class="table-actions">
             <button class="btn btn-outline" onclick="markPaid('${order.payment_id}')">Mark Paid</button>
             <button class="btn btn-outline" onclick="lock('${order.payment_id}')">Lock</button>
+            <button class="btn btn-outline" onclick="assignCredentials('${order.id}')">Assign Credentials</button>
           </div>
         </td>
       `;
@@ -63,25 +66,42 @@ async function loadAllOrders() {
 }
 
 async function markPaid(paymentId) {
-  await fetch(`${API_BASE}/api/order/paid`, {
+  await fetch(`${API_BASE}/api/admin/paid`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "x-admin-password": adminPassword
     },
-    body: JSON.stringify({ paymentId })
+    body: JSON.stringify({ paymentId, paymentSource: "MANUAL", paymentAmount: 100 })
   });
   loadAllOrders();
 }
 
 async function lock(paymentId) {
-  await fetch(`${API_BASE}/api/order/lock`, {
+  const lockReason = prompt("Lock reason?") || "Account locked";
+  await fetch(`${API_BASE}/api/admin/lock`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "x-admin-password": adminPassword
     },
-    body: JSON.stringify({ paymentId })
+    body: JSON.stringify({ paymentId, lockReason })
+  });
+  loadAllOrders();
+}
+
+async function assignCredentials(orderId) {
+  const credentialsId = prompt("Credentials inventory ID?");
+  if (!credentialsId) {
+    return;
+  }
+  await fetch(`${API_BASE}/api/admin/assign-credentials`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-admin-password": adminPassword
+    },
+    body: JSON.stringify({ orderId, credentialsId })
   });
   loadAllOrders();
 }

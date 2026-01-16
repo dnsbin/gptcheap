@@ -1,5 +1,12 @@
-const API_BASE = "http://YOUR_SERVER_IP:3000";
-const email = localStorage.getItem("userEmail");
+function statusClass(status) {
+  if (status === "PAID") {
+    return "status-paid";
+  }
+  if (status === "LOCKED") {
+    return "status-locked";
+  }
+  return "status-pending";
+}
 
 function statusClass(status) {
   if (status === "PAID") {
@@ -12,7 +19,17 @@ function statusClass(status) {
 }
 
 async function loadOrders() {
-  const res = await fetch(`${API_BASE}/api/orders/${email}`);
+  const session = await getSession();
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const res = await fetch(`${API_BASE}/api/orders`, {
+    headers: {
+      Authorization: `Bearer ${session.access_token}`
+    }
+  });
   const orders = await res.json();
 
   const container = document.getElementById("orders");
@@ -36,16 +53,17 @@ async function loadOrders() {
             <h3>Credentials</h3>
             <span class="status-pill status-paid">PAID</span>
           </div>
-          <p class="mono">${o.credentials_email}</p>
-          <button class="btn btn-outline copy-btn" data-copy-text="${o.credentials_email}">Copy Email</button>
-          <p class="mono">${o.credentials_password}</p>
-          <button class="btn btn-outline copy-btn" data-copy-text="${o.credentials_password}">Copy Password</button>
+          <p class="mono">${o.credentials_email || ""}</p>
+          <button class="btn btn-outline copy-btn" data-copy-text="${o.credentials_email || ""}">Copy Email</button>
+          <p class="mono">${o.credentials_password || ""}</p>
+          <button class="btn btn-outline copy-btn" data-copy-text="${o.credentials_password || ""}">Copy Password</button>
         </div>
       `;
     }
 
     if (o.status === "LOCKED") {
-      creds = "<p class='note' style='color: var(--danger);'>Account locked due to abuse</p>";
+      const reason = o.lock_reason ? `Reason: ${o.lock_reason}` : "Account locked due to abuse";
+      creds = `<p class='note' style='color: var(--danger);'>${reason}</p>`;
     }
 
     const div = document.createElement("div");

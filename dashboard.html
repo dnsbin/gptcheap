@@ -11,7 +11,8 @@
       <div class="logo">GPTCheap</div>
       <div class="nav-links">
         <span class="badge" id="userEmail">No email</span>
-        <a href="signup.html" class="btn btn-outline">New Order</a>
+        <a href="checkout.html" class="btn btn-outline">New Order</a>
+        <button class="btn btn-outline" id="logoutButton">Logout</button>
       </div>
     </header>
 
@@ -19,7 +20,7 @@
       <aside class="sidebar">
         <h3>Navigation</h3>
         <a class="active" href="dashboard.html">Orders</a>
-        <a href="signup.html">Checkout</a>
+        <a href="checkout.html">Checkout</a>
         <a href="index.html">Home</a>
         <p class="note">Status updates appear instantly once paid.</p>
       </aside>
@@ -55,11 +56,10 @@
 
   <div class="toast" id="toast">COPIED</div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="client.js"></script>
   <script src="dashboard_credentials.js"></script>
   <script>
-    const email = localStorage.getItem("userEmail") || "No email";
-    document.getElementById("userEmail").innerText = email;
-
     const toast = document.getElementById("toast");
 
     function showToast() {
@@ -78,6 +78,20 @@
         return;
       }
       navigator.clipboard.writeText(text).then(showToast);
+    });
+
+    getSession().then((session) => {
+      if (!session) {
+        window.location.href = "login.html";
+        return;
+      }
+      document.getElementById("userEmail").innerText = session.user.email || "";
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+      const client = await getSupabaseClient();
+      await client.auth.signOut();
+      window.location.href = "login.html";
     });
   </script>
 </body>
